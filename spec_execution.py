@@ -20,6 +20,7 @@ import spec_structure as structure
 import spec_validation as validation
 import math
 import struct
+import compiler as compiler
 
 verbose = 0
 
@@ -1969,6 +1970,12 @@ def spec_invoke(S,funcaddr,valn):
     operand_stack += [arg]
   # 7
   valresm=None
+  compile = True
+  if "code" in funcinst and compile:
+    config = {"S":S,"F":[],"instrstar":[["invoke",funcaddr],["end",None]],"idx":0,"operand_stack":operand_stack,"control_stack":[]}
+    #print("spec_invoke prepared config: {}".format(config))
+    result = compiler.compileAndRunWasmFunc(config)
+    return result
   if "code" in funcinst:
     #config = {"S":S,"F":[],"instrstar":funcinst["code"]["body"],"idx":0,"operand_stack":operand_stack,"control_stack":[]}  #TODO: toggle these back when uncomment main loop execution
     #valresm = spec_invoke_function_address(config,funcaddr)  #TODO: toggle these back when uncomment main loop execution 
